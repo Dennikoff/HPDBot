@@ -37,7 +37,7 @@ func (c *Client) Update(offset int, limit int) ([]Update, error) {
 	q.Add("offset", strconv.Itoa(offset))
 	q.Add("limit", strconv.Itoa(limit))
 
-	data, err := c.DoRequest(getUpdatesMethod, q)
+	data, err := c.doRequest(getUpdatesMethod, q)
 
 	if err != nil {
 		return nil, e.Wrap(errMsg, err)
@@ -55,7 +55,7 @@ func (c *Client) SendMessage() {
 
 }
 
-func (c *Client) DoRequest(method string, query url.Values) ([]byte, error) {
+func (c *Client) doRequest(method string, query url.Values) ([]byte, error) {
 	const errMsg = "Can't do request"
 	u := url.URL{
 		Scheme: "https",
