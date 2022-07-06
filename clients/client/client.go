@@ -1,6 +1,7 @@
 package client
 
 import (
+	"encoding/json"
 	"github.com/denis0108/BotHpd/lib/e"
 	"io"
 	"net/http"
@@ -42,6 +43,12 @@ func (c *Client) Update(offset int, limit int) ([]Update, error) {
 		return nil, e.Wrap(errMsg, err)
 	}
 
+	var res UpdateResponse
+
+	if err := json.Unmarshal(data, &res); err != nil {
+		return nil, e.Wrap(errMsg, err)
+	}
+	return res.Result, nil
 }
 
 func (c *Client) SendMessage() {

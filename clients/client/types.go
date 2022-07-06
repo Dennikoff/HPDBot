@@ -2,7 +2,7 @@ package client
 
 type UpdateResponse struct {
 	Ok     bool     `json:"ok"`
-	Result []Client `json:"result"`
+	Result []Update `json:"result"`
 }
 
 type Update struct {
