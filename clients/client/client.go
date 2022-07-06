@@ -10,7 +10,10 @@ import (
 	"strconv"
 )
 
-const getUpdatesMethod = "getUpdates"
+const (
+	getUpdatesMethod  = "getUpdates"
+	sendMessageMethod = "sendMessage"
+)
 
 type Client struct {
 	host     string
@@ -51,8 +54,15 @@ func (c *Client) Update(offset int, limit int) ([]Update, error) {
 	return res.Result, nil
 }
 
-func (c *Client) SendMessage() {
-
+func (c *Client) SendMessage(chatID int, text string) error {
+	q := url.Values{}
+	q.Add("char_id", strconv.Itoa(chatID))
+	q.Add("text", text)
+	_, err := c.doRequest(sendMessageMethod, q)
+	if err != nil {
+		return e.Wrap("Can't send message", err)
+	}
+	return nil
 }
 
 func (c *Client) doRequest(method string, query url.Values) ([]byte, error) {
@@ -74,7 +84,7 @@ func (c *Client) doRequest(method string, query url.Values) ([]byte, error) {
 		return nil, e.Wrap(errMsg, err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	body, err := io.ReadAll(resp.Body)
 
