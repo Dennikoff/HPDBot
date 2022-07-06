@@ -2,12 +2,16 @@ package main
 
 import (
 	"flag"
+	"github.com/denis0108/BotHpd/clients/client"
 	"log"
 )
 
+const host = "api.telegram.org"
+
 func main() {
 	//t := mustToken()
-	// client := client.New()
+	client := client.New(host, mustToken())
+	client.SendMessage()
 }
 
 func mustToken() string {
